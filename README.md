@@ -1,3 +1,5 @@
+## Agentic Workflow using LangGraph
+
 **This project is not trying to build something for production. It is meant as a learning exercise.**
 
 The objective of this project is learn how to create agentic workflows and work with LLMs. It also has scope to introduce Retrieval Augmented Generation (RAG) into the process.
