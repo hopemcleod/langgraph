@@ -4,13 +4,11 @@ from langchain_core.messages import HumanMessage
 import requests
 from states.state import AgentGraphState
 
-
 def is_garbled(text):
     # A simple heuristic to detect garbled text: high proportion of non-ASCII characters
     # NOTE to myself: The following is an example of a generator expression
     non_ascii_count = sum(1 for char in text if ord(char) > 127)
     return non_ascii_count > len(text) * 0.3
-
 
 '''
 selected_website is a function reference that when called gets the latest state
@@ -47,7 +45,7 @@ def scrape_website(state: AgentGraphState, selected_website):
         # response = requests.get('https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9529058/', headers=headers)
         response.raise_for_status()
 
-        soup = BeautifulSoup(response.content.decode(), 'html.parser')
+        soup = BeautifulSoup(response.text, 'html.parser')
 
         # Extract the text content
         text = soup.stripped_strings

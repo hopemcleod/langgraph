@@ -1,33 +1,39 @@
-# Imports
 from agent_graph.graph import create_graph, compile_graph
+from models_config import models
 from models.models import Llama_LLM, OpenAI_LLM
-from utils.helper_functions import apply_decorator_to_all_functions, print_function_name
-import sys
 from termcolor import colored
 
+def generate_graph_workflow():
+    """
+    Generates a agentic graph workflow.
 
-model = OpenAI_LLM(model='gpt-4o')
-# model = Llama_LLM(model="meta-llama/Meta-Llama-3.1-8B-Instruct")
+    Returns:
+        CompiledStateGraph
+    """
+    # Create an agent workflow 
+    graph = create_graph(models)
 
-# Define the agent graph
-graph = create_graph(server=model.server, model=model.model)
-# graph = create_graph(server=model.server, model=model.model, model_endpoint=model.local_model_endpoint)
+    # Compile the graph
+    return compile_graph(graph)
 
-# Compile the graph
-workflow = compile_graph(graph)
-
-# temp 
-question: str = "Find me 5 evidence based articles on low back pain."
-
-user_question = question
-
-# Main function - use this to get input from the user
-iterations = 10
 if __name__ == "__main__":
-    # apply_decorator_to_all_functions(sys.modules[__name__], print_function_name)
+    """
+        Calls each agent in the agent workflow and outputs responses as they are returned.
+        The iterations specifies the number of complete cycles of the workflow. The
+        output is streamed to the console using colour to help differentiate between the
+        different agents.
+
+        TODO: Not clear. This workflow will have a reviewer step and so does that mean
+        that an iteration could go on endlessly?
+    """
+    workflow = generate_graph_workflow()
+
+    # For development purposes only. The  user input will be taken from a UI field.
+    questions = ["Provide a summary of what the best exercises are for low back pain. Take these summaries from at least 5 evidence based papers."]
+    user_question: str = questions[0]    
+    iterations = 10
 
     while True:
-        # user_question = input("How can I help?: ") # temp removal
         if user_question.lower() == "exit":
             break
 
